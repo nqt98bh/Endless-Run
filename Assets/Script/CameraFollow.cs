@@ -10,8 +10,8 @@ public class CameraFollow : MonoBehaviour
     Vector3 offset = new Vector3(0, 4, -8);
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
     private void Update()
     {

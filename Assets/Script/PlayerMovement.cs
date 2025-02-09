@@ -2,13 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Movement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     float speed = 5f;
     private bool isTurning = false;
     private void Update()
     {
-        //float horizonInput = Input.GetAxis("Horizontal");
+        //float horizonInput = Input.GetAxis("Horizontal"); 
         float horizonInput = Input.GetAxisRaw("Horizontal");
         if (!isTurning)
         {
@@ -26,8 +26,8 @@ public class Movement : MonoBehaviour
 
             }
         }
-      
-        transform.Translate(Vector3.forward * speed * Time.deltaTime);
+
+        transform.position += transform.forward * speed * Time.deltaTime;
         if (horizonInput == 0)
         {
             isTurning = false;
