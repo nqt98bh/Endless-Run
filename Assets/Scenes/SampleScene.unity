@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 0d5771081eb9abb43b1792b52260d914, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -501,6 +501,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9bd8a568f6d1947a6f276c7a06c53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 5
+  secondsPerTurn: 0.5
 --- !u!65 &1477029782
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -611,6 +613,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f9bd8a568f6d1947a6f276c7a06c53b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 5
+  secondsPerTurn: 0.5
 --- !u!136 &1562762197
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -680,7 +684,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1771639562
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -734,7 +738,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 42e26e838cb21e944aa7de2aae4edefc, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
