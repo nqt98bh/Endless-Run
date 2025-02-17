@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PathGenerator : MonoBehaviour
 {
-    public GameObject segmentPrefab;
+    public UnityEngine.GameObject segmentPrefab;
     Vector3 nextSpawnPoint;
     Quaternion nextRotation =Quaternion.identity;
     private const int SEGMENT_BEFORE_TURN = 5;
@@ -27,7 +27,7 @@ public class PathGenerator : MonoBehaviour
     public void GenerateSegment(int segmentCount)
     {
 
-        GameObject newSegment = Instantiate(segmentPrefab, nextSpawnPoint, nextRotation);
+        UnityEngine.GameObject newSegment = Instantiate(segmentPrefab, nextSpawnPoint, nextRotation);
         if(segmentCount % SEGMENT_BEFORE_TURN == 0)
         {
             int rotationAngle = RandomTurnWithConstraint();

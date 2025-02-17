@@ -8,7 +8,7 @@ public class DeathZone : MonoBehaviour
     {
         if(other.CompareTag("Player"))
         {
-            Debug.Log("You Die");
+           
         }
     }
 }
