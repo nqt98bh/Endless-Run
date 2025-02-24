@@ -6,11 +6,11 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    public GameObject GameOverPanel;
-    public GameObject StartingPanel;
-    public TextMeshPro GameOverText;
+    [SerializeField] private GameObject GameOverPanel;
+    [SerializeField] private GameObject StartingPanel;
+    [SerializeField] private TextMeshProUGUI ScoreText;
     public bool isGameOver;
-    private bool isGameStarting;
+    public bool isGameStarting;
 
     private void Awake()
     {
@@ -20,11 +20,11 @@ public class GameManager : MonoBehaviour
     {
         bool isGameOver = false;
         bool isGameStarting = false;
-        Time.timeScale = 0;
+        Time.timeScale = 1;
     }
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Return))
         {
             StartingGame();
         }
@@ -33,10 +33,10 @@ public class GameManager : MonoBehaviour
             GameOver();
         }
 
+        UpdateScore();
     }
     private void StartingGame()
     {
-        Time.timeScale = 1;
         isGameStarting = true;
         StartingPanel.SetActive(false);
     }
@@ -45,6 +45,10 @@ public class GameManager : MonoBehaviour
         GameOverPanel.SetActive(true);
         Time.timeScale = 0;
 
+    }
+    private void UpdateScore()
+    {
+        ScoreText.text = $" {PlayerController.Instance.Score}";
     }
 }
 
