@@ -12,11 +12,15 @@ public class CoinSpawner : MonoBehaviour
     
     private void Start()
     {
-        
-        SpawnStraightLine();
-       
-        SpawnByArc(coinCount, 1, 60);
-        
+        int randomSpawn = Random.Range(0, 3);
+        if(randomSpawn == 0)
+        {
+            SpawnStraightLine();
+
+        }
+
+
+
     }
 
    private void SpawnStraightLine()

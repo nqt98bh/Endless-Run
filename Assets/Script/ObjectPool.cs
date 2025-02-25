@@ -8,7 +8,7 @@ public class ObjectPool : MonoBehaviour
 
     [SerializeField] private GameObject prefab;
     [SerializeField] private int poolSize;
-    List<GameObject> poolList = new List<GameObject>();
+    private List<GameObject> poolList = new List<GameObject>();
     public Action RecycleAction;
 
     private void Awake()
