@@ -44,7 +44,7 @@ public class PathGenerator : MonoBehaviour
             }
             segmentList.Add(newSegment);
         }
-            // Update the spawn point for the next segment
+        // Update the spawn point for the next segment
 
         nextSpawnPoint += newSegment.transform.forward*SEGMENT_SQUARE_SIZE ;// Move 1 unit forward in the local forward direction
 

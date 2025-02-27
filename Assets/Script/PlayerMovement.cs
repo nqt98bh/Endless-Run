@@ -13,17 +13,14 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float secondsPerTurn = 0.5f;
     private float lastTurnTime = 0;
     private Quaternion targetRotation;
-    private Vector3 targetPosition;
     private float horizonInput;
-    private Rigidbody rb;
-    private Animator animator;
-    public PathGenerator pathGenerator = new PathGenerator();
     private Lanes lanes;
     Segment currentSegment = null;
+    Animator animator;
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
@@ -34,20 +31,16 @@ public class PlayerMovement : MonoBehaviour
     {
 
         targetRotation = transform.rotation;
-        rb = GetComponent<Rigidbody>();
-        animator = GetComponent<Animator>();
         lanes = Lanes.Middle;
+        animator = GetComponent<Animator>();
 
-        //segmentPositions = pathGenerator.segmentPosition();
     }
     private void Update()
     {
 
         if (!GameManager.Instance.isGameStarting) return;
         horizonInput = Input.GetAxisRaw("Horizontal");
-        Vector3 direction = Vector3.forward;
-        direction.x = 0;
-        transform.Translate(direction * speed *Time.deltaTime);
+        MoveFoward();
         ChangLane();
 
         if (currentSegment != null && currentSegment.isTurning == true)
@@ -55,8 +48,13 @@ public class PlayerMovement : MonoBehaviour
             CharacterTurning();
         }
     }
- 
 
+    void MoveFoward()
+    {
+        Vector3 direction = Vector3.forward;
+        direction.x = 0;
+        transform.Translate(direction * speed * Time.deltaTime);
+    }
     private void ChangLane()
     {
       if(horizonInput > 0)
@@ -102,15 +100,24 @@ public class PlayerMovement : MonoBehaviour
   
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("DeathZone"))
+        if (collision.gameObject.CompareTag("DeathZone") )
         {
             GameManager.Instance.isGameOver = true;
+
+        }
+        if (collision.gameObject.CompareTag("Obstacle"))
+        {
+            
+            animator.SetTrigger("CollideObstacle");
+            Debug.Log("collide with obstacle");
+           // GameManager.Instance.isGameOver = true;
+
 
         }
         Segment segment = collision.gameObject.GetComponent<Segment>();
         if (segment != null)
         {
-            this.currentSegment = segment;
+            currentSegment = segment;
         }
 
        

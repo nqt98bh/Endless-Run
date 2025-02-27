@@ -9,56 +9,70 @@ public class CoinSpawner : MonoBehaviour
     [SerializeField] private int coinCount = 10;
     private int SEGMENT_WIDTH = 5;
     private List<int> lanes = new List<int>() { -3, 0, 3 };
-    
-    private void Start()
+    [SerializeField] private Transform player;
+    int lastSpawnedSegmentIndex = -1;
+
+    private void Update()
     {
-        int randomSpawn = Random.Range(0, 3);
-        if(randomSpawn == 0)
-        {
-            SpawnStraightLine();
-
-        }
-
-
-
+        SpawnCoinRandom();
     }
-
-   private void SpawnStraightLine()
+    private void SpawnCoinRandom()
     {
-        
-        foreach (GameObject segment in PathGenerator.Instance.segmentList)
+        for(int i = lastSpawnedSegmentIndex +1; i < PathGenerator.Instance.segmentList.Count; i++)
         {
-            int randomLane = Random.Range(0, 3);
-            Vector3 lane = new Vector3(lanes[randomLane],1,0);
-
-                for (int i = 0; i < coinCount; i++)
-                {
-                    Spawner(segment.transform.position+ lane  + segment.transform.forward * i * SEGMENT_WIDTH);
-                }
-            
-
-        }
-    }
-    private void SpawnByArc(int numCoins, float radius, float arcAngle)
-    {
-        foreach (GameObject segment in PathGenerator.Instance.segmentList)
-        {
-            Vector3 startPos = segment.transform.position;  
-            for (int i = 0; i < numCoins; i++)
+            GameObject segment = PathGenerator.Instance.segmentList[i];
+            if (segment != null && player.position.z + 10f >= segment.transform.position.z)
             {
-                float angle = Mathf.Lerp(-arcAngle / 2, arcAngle / 2, (float)i / (numCoins - 1)); // Spread coins evenly
-
-                float x = startPos.x + radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-                float y = startPos.y + radius * Mathf.Cos(angle * Mathf.Deg2Rad); // Fix the arc to curve upwards
-                float z = startPos.z+ i*SEGMENT_WIDTH; // Keep it on the same forward path
-                Vector3 position = new Vector3(x, y, z);
-                Spawner(position);
+                int randomSpawnType = Random.Range(0, 2);
+                if (randomSpawnType == 0)
+                {
+                    SpawnStraightLine(segment.transform);
+                }
+                else /*if (randomSpawnType == 1)*/
+                {
+                   //SpawnByArc(segment.transform, coinCount, 3f, 50f);
+                }
+                
+                lastSpawnedSegmentIndex =i;
+                break;
             }
+        } 
+    }
+
+   private void SpawnStraightLine(Transform segment)
+    {
+        int randomLane = Random.Range(0, 3);
+        Vector3 lane = new Vector3(lanes[randomLane], 1, 0);
+
+        for (int i = 0; i < coinCount; i++)
+        {
+            SpawnCoin(segment.transform.position + lane + segment.transform.forward * i * SEGMENT_WIDTH);
+        }
+        lastSpawnedSegmentIndex +=1;
+    }
+    private void SpawnByArc(Transform segmentTransform, int numCoins, float radius, float arcAngle)
+    {
+        Vector3 segmentPosition = segmentTransform.position;
+        Quaternion segmentRotation = segmentTransform.rotation; // Get rotation to align coins with path
+
+        for (int i = 0; i < numCoins; i++)
+        {
+            float angle = Mathf.Lerp(-arcAngle / 2, arcAngle / 2, (float)i / (numCoins - 1)); // Spread coins evenly
+
+            // Calculate local position
+            float localX = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
+            float localZ = radius * Mathf.Cos(angle * Mathf.Deg2Rad); // Arc moves forward
+
+            // Convert to world position using segment's rotation
+            Vector3 localPosition = new Vector3(localX, 1f, localZ);
+            Vector3 worldPosition = segmentPosition + segmentRotation * localPosition;
+
+            SpawnCoin(worldPosition);
         }
     }
 
 
-    private void Spawner(Vector3 position)
+    private void SpawnCoin(Vector3 position)
     {
        
         GameObject CoinGo = coinPool.GetObject(position,Quaternion.identity);

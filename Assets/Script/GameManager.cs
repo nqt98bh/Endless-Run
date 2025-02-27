@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         }
         if (isGameOver)
         {
-            GameOver();
+            StartCoroutine(GameOver());
         }
 
         UpdateScore();
@@ -41,10 +41,11 @@ public class GameManager : MonoBehaviour
         isGameStarting = true;
         StartingPanel.SetActive(false);
     }
-    private void GameOver()
+    private IEnumerator GameOver()
     {
         GameOverPanel.SetActive(true);
         Time.timeScale = 0;
+        yield return new WaitForSeconds(3);
 
     }
     private void UpdateScore()
