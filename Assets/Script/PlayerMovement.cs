@@ -17,6 +17,7 @@ public class PlayerMovement : MonoBehaviour
     private Lanes lanes;
     Segment currentSegment = null;
     Animator animator;
+    bool isTurning = false;
 
     private void Awake()
     {
@@ -43,9 +44,16 @@ public class PlayerMovement : MonoBehaviour
         MoveFoward();
         ChangLane();
 
-        if (currentSegment != null && currentSegment.isTurning == true)
+        if (currentSegment != null && currentSegment.segmentTurn == true && isTurning == false  )
         {
-            CharacterTurning();
+            
+                CharacterTurning();
+            isTurning = true;
+            
+        }
+        else if (currentSegment.segmentTurn == false)
+        {
+            isTurning = false;
         }
     }
 

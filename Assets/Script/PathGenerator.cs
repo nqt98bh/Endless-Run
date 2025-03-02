@@ -28,22 +28,25 @@ public class PathGenerator : MonoBehaviour
     }
     public void GenerateSegment(int segmentCount)
     {
-
+        int rotationAngle = 0;
         GameObject newSegment = Instantiate(segmentPrefab, nextSpawnPoint, nextRotation);
         Segment segment = newSegment.GetComponent<Segment>();
 
         if (segmentCount % SEGMENT_BEFORE_TURN == 0)
         {
-            int rotationAngle = RandomTurnWithConstraint();
-            nextRotation *= Quaternion.Euler(0, rotationAngle, 0);
-            newSegment.transform.rotation = nextRotation;
+            rotationAngle = RandomTurnWithConstraint();
             currentTotalRotation += rotationAngle;
             if (rotationAngle != 0)
             {
-                segment.isTurning = true;
+                segment.segmentTurn = true;
             }
-            segmentList.Add(newSegment);
+
         }
+        nextRotation *= Quaternion.Euler(0, rotationAngle, 0);
+        newSegment.transform.rotation = nextRotation;
+        segmentList.Add(newSegment);
+        segment.WallSetUp(rotationAngle);
+
         // Update the spawn point for the next segment
 
         nextSpawnPoint += newSegment.transform.forward*SEGMENT_SQUARE_SIZE ;// Move 1 unit forward in the local forward direction

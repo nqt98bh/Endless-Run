@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class CoinSpawner : MonoBehaviour
 {
+    public static CoinSpawner Instance;
     public ObjectPool coinPool;
     [SerializeField] private int coinCount = 10;
     private int SEGMENT_WIDTH = 5;
@@ -16,14 +17,15 @@ public class CoinSpawner : MonoBehaviour
     {
         SpawnCoinRandom();
     }
-    private void SpawnCoinRandom()
+
+    public void SpawnCoinRandom()
     {
         for(int i = lastSpawnedSegmentIndex +1; i < PathGenerator.Instance.segmentList.Count; i++)
         {
             GameObject segment = PathGenerator.Instance.segmentList[i];
             if (segment != null && player.position.z + 10f >= segment.transform.position.z)
             {
-                int randomSpawnType = Random.Range(0, 2);
+                int randomSpawnType = Random.Range(0, 4);
                 if (randomSpawnType == 0)
                 {
                     SpawnStraightLine(segment.transform);

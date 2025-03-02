@@ -6,15 +6,14 @@ using UnityEngine;
 public class Segment : MonoBehaviour
 {
     [SerializeField] private List<GameObject> decorationObjects;
-    public bool isTurning = false;
-    float XLimit = 3f;
-    float ZLimit = 3f;
+    public bool segmentTurn = false;
+    float XLimit = 4f;
+    float ZLimit = 4f;
     [SerializeField] private List<GameObject> walls;
  
     private void Start()
     {
         RandomdecorationObjects();
-        WallSetUp();
       
     }
     void RandomdecorationObjects()
@@ -28,10 +27,8 @@ public class Segment : MonoBehaviour
             obj.transform.localRotation = Quaternion.Euler(transform.localRotation.x, randomRotationY, transform.localRotation.z);
         }
     }
-    private void WallSetUp()
+    public void WallSetUp(float angle)
     {
-        float yRotation = transform.eulerAngles.y; // Get segment rotation
-
         // Ensure we have 4 walls in the list
         if (walls.Count < 4) return;
 
@@ -48,19 +45,23 @@ public class Segment : MonoBehaviour
         }
 
 
-       
-        if (Mathf.Approximately(yRotation, 90f) && isTurning == true)
+
+        if (  angle == 90  )
         {
             wallLeft.SetActive(true);
             wallBack.SetActive(true);
         }
-        if (Mathf.Approximately(yRotation, -90f) && isTurning == true)
+        else if (angle == -90 )
         {
             wallRight.SetActive(true);
             wallBack.SetActive(true);
         }
-        wallLeft.SetActive(true);
-        wallRight.SetActive(true);
+        else
+        {
+            wallLeft.SetActive(true);
+            wallRight.SetActive(true);
+        }
+        //Debug.Log("segment turning:"+isTurning);
     }
 
 }
