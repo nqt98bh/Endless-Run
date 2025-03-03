@@ -44,16 +44,19 @@ public class PlayerMovement : MonoBehaviour
         MoveFoward();
         ChangLane();
 
-        if (currentSegment != null && currentSegment.segmentTurn == true && isTurning == false  )
+        if (currentSegment != null && currentSegment.segmentTurn == true )
         {
             
-                CharacterTurning();
-            isTurning = true;
-            
+            CharacterTurning();
+            Debug.Log("isTurning:" + isTurning);
+
+
         }
         else if (currentSegment.segmentTurn == false)
         {
             isTurning = false;
+            Debug.Log("isTurning:" + isTurning);
+
         }
     }
 
@@ -86,18 +89,19 @@ public class PlayerMovement : MonoBehaviour
             return;
         }
 
-        if (horizonInput > 0)
+        if (horizonInput > 0 && isTurning == false)
         {
             StartTurn(90);
 
         }
-        if (horizonInput < 0)
+        if (horizonInput < 0 && isTurning == false)
         {
             StartTurn(-90);
 
         }
         if (horizonInput == 0) return;
 
+        isTurning = true;
 
     }
     private void StartTurn(float angle)
@@ -118,7 +122,7 @@ public class PlayerMovement : MonoBehaviour
             
             animator.SetTrigger("CollideObstacle");
             Debug.Log("collide with obstacle");
-           // GameManager.Instance.isGameOver = true;
+           GameManager.Instance.isGameOver = true;
 
 
         }

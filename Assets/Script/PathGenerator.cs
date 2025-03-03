@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PathGenerator : MonoBehaviour
 {
+    public PoolManager segmentPool;
     public static PathGenerator Instance;
     public UnityEngine.GameObject segmentPrefab;
     Vector3 nextSpawnPoint;
@@ -13,24 +14,32 @@ public class PathGenerator : MonoBehaviour
     const int SEGMENT_SQUARE_SIZE = 10;
     private int currentTotalRotation = 0;
     public List<GameObject> segmentList = new List<GameObject>();
-    
-    private void Start()
+    public List<GameObject> segmentTurn = new List<GameObject>();
+    [SerializeField] private Transform player;
+
+    private void Awake()
     {
         if (Instance == null) Instance = this;
+
+    }
+    private void Start()
+    {
         for (int i = 0; i < MAX_SEGMENT_COUNT; i++)
         {
-            // Lấy góc quay mới bằng hàm RandomTurnWithConstraint
-            GenerateSegment(i+1);
-          
-            //GetRotation();
-          
+            
+            Spawnsegment(i+1);
         }
+
     }
-    public void GenerateSegment(int segmentCount)
+    
+
+
+    private void Spawnsegment (int segmentCount)
     {
         int rotationAngle = 0;
-        GameObject newSegment = Instantiate(segmentPrefab, nextSpawnPoint, nextRotation);
-        Segment segment = newSegment.GetComponent<Segment>();
+        //GameObject newSegment = Instantiate(segmentPrefab, nextSpawnPoint, nextRotation);
+        GameObject segmentGO = segmentPool.GetObject(nextSpawnPoint, nextRotation);
+        Segment segment = segmentGO.GetComponent<Segment>();
 
         if (segmentCount % SEGMENT_BEFORE_TURN == 0)
         {
@@ -40,17 +49,21 @@ public class PathGenerator : MonoBehaviour
             {
                 segment.segmentTurn = true;
             }
-
         }
         nextRotation *= Quaternion.Euler(0, rotationAngle, 0);
-        newSegment.transform.rotation = nextRotation;
-        segmentList.Add(newSegment);
+        segmentGO.transform.rotation = nextRotation;
+        segmentList.Add(segmentGO);
         segment.WallSetUp(rotationAngle);
 
         // Update the spawn point for the next segment
 
-        nextSpawnPoint += newSegment.transform.forward*SEGMENT_SQUARE_SIZE ;// Move 1 unit forward in the local forward direction
-
+        nextSpawnPoint += segmentGO.transform.forward*SEGMENT_SQUARE_SIZE ;// Move 1 unit forward in the local forward direction
+        segment.ReturnAction(() =>
+        {
+            RecycleSegment(segmentGO);
+        });
+        InitSegment(segmentGO);
+        
     }
     int RandomTurnWithConstraint()
     {
@@ -66,7 +79,16 @@ public class PathGenerator : MonoBehaviour
         }
         return randomTurn;
     }
-  
+    private void InitSegment(GameObject segment)
+    {
+        segmentPool.Init(segment);
+    }
+    private void RecycleSegment(GameObject segment)
+    {
+        segmentList.Remove(segment);
+        segmentPool.ReturnPool(segment);
+    }
+
 
 }
 

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using System;
+using Random = UnityEngine.Random;
 
 public class Segment : MonoBehaviour
 {
@@ -10,7 +12,7 @@ public class Segment : MonoBehaviour
     float XLimit = 4f;
     float ZLimit = 4f;
     [SerializeField] private List<GameObject> walls;
- 
+    Action RecycleAction;
     private void Start()
     {
         RandomdecorationObjects();
@@ -44,8 +46,6 @@ public class Segment : MonoBehaviour
             wall.SetActive(false);
         }
 
-
-
         if (  angle == 90  )
         {
             wallLeft.SetActive(true);
@@ -63,5 +63,21 @@ public class Segment : MonoBehaviour
         }
         //Debug.Log("segment turning:"+isTurning);
     }
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision == null) return;
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            StartCoroutine(InvokeActionAfterDelay());
+        }
+    }
+    private IEnumerator InvokeActionAfterDelay()
+    {
+        yield return new WaitForSeconds(3);
+        RecycleAction?.Invoke();
+    }
+    public void ReturnAction (Action _recycleAction)
+    {
+        RecycleAction = _recycleAction;
+    }
 }

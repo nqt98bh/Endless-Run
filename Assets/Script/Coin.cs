@@ -5,10 +5,10 @@ using UnityEngine.Pool;
 
 public class Coin : MonoBehaviour
 {
-    private ObjectPool Coinpool;
+    private PoolManager Coinpool;
     private void Start()
     {
-        Coinpool = GetComponent<ObjectPool>();
+        Coinpool = GetComponent<PoolManager>();
     }
 
     // Update is called once per frame

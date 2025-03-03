@@ -6,7 +6,7 @@ using UnityEngine;
 public class CoinSpawner : MonoBehaviour
 {
     public static CoinSpawner Instance;
-    public ObjectPool coinPool;
+    public PoolManager coinPool;
     [SerializeField] private int coinCount = 10;
     private int SEGMENT_WIDTH = 5;
     private List<int> lanes = new List<int>() { -3, 0, 3 };
@@ -23,7 +23,7 @@ public class CoinSpawner : MonoBehaviour
         for(int i = lastSpawnedSegmentIndex +1; i < PathGenerator.Instance.segmentList.Count; i++)
         {
             GameObject segment = PathGenerator.Instance.segmentList[i];
-            if (segment != null && player.position.z + 10f >= segment.transform.position.z)
+            if (segment != null && player.position.z + 10f >= segment.transform.position.z && i%5 ==0)
             {
                 int randomSpawnType = Random.Range(0, 4);
                 if (randomSpawnType == 0)
@@ -38,6 +38,7 @@ public class CoinSpawner : MonoBehaviour
                 lastSpawnedSegmentIndex =i;
                 break;
             }
+          
         } 
     }
 
@@ -79,10 +80,17 @@ public class CoinSpawner : MonoBehaviour
        
         GameObject CoinGo = coinPool.GetObject(position,Quaternion.identity);
         CoinGo.transform.position = position ; 
-        Coin coin = gameObject.GetComponent<Coin>();
+        Coin coin = CoinGo.GetComponent<Coin>();
         coinPool.Init(gameObject);
+        if (player.position.z > CoinGo.transform.position.z +2f)
+        {
+            ReturnCoin(CoinGo);
+        }
 
     }
-
+    private void ReturnCoin(GameObject coin)
+    {
+        coinPool.ReturnPool(coin);
+    }
 
 }
