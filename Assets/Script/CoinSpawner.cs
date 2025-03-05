@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.IMGUI.Controls;
 using UnityEngine;
 
@@ -15,33 +16,52 @@ public class CoinSpawner : MonoBehaviour
 
     private void Update()
     {
-        SpawnCoinRandom();
+        //SpawnCoinRandom();
     }
 
+
+    private void CheckSpawnCoin()
+    {
+
+    }
     public void SpawnCoinRandom()
     {
-        for(int i = lastSpawnedSegmentIndex +1; i < PathGenerator.Instance.segmentList.Count; i++)
+      
+        for(int i = lastSpawnedSegmentIndex ; i < PathGenerator.Instance.segmentPool.GetPoolList().Count; i++) 
         {
-            GameObject segment = PathGenerator.Instance.segmentList[i];
-            if (segment != null && player.position.z + 10f >= segment.transform.position.z && i%5 ==0)
+           
+            GameObject segment = PathGenerator.Instance.segmentPool.GetPoolList()[i];
+            if (segment != null && player.position.z + 10f >= segment.transform.position.z && i % 5 == 0)
             {
-                int randomSpawnType = Random.Range(0, 4);
+                int randomSpawnType = Random.Range(0, 2);
                 if (randomSpawnType == 0)
                 {
                     SpawnStraightLine(segment.transform);
                 }
-                else /*if (randomSpawnType == 1)*/
+                else if (randomSpawnType == 1)
                 {
-                   //SpawnByArc(segment.transform, coinCount, 3f, 50f);
+                    //SpawnZigzagLine(segment.transform);
                 }
                 
                 lastSpawnedSegmentIndex =i;
+                Debug.Log("lastSpawnedSegmentIndex:" + lastSpawnedSegmentIndex);
                 break;
             }
           
-        } 
-    }
+        }
+        Debug.Log("PathGenerator.Instance.segmentPool.GetPoolList():" + PathGenerator.Instance.segmentPool.GetPoolList().Count);
+        int index = 0;
+        foreach (GameObject segment in PathGenerator.Instance.segmentPool.GetPoolList())
+        {
+            index++;
+            if(index %5 == 0)
+            {
 
+            }
+        }
+
+    }
+    
    private void SpawnStraightLine(Transform segment)
     {
         int randomLane = Random.Range(0, 3);
@@ -52,6 +72,22 @@ public class CoinSpawner : MonoBehaviour
             SpawnCoin(segment.transform.position + lane + segment.transform.forward * i * SEGMENT_WIDTH);
         }
         lastSpawnedSegmentIndex +=1;
+    }
+
+    private void SpawnZigzagLine(Transform segment)
+    {
+        float zigzagWidth = 2f; // Adjust width of zigzag pattern
+        Vector3 startPosition = segment.position;
+        bool moveLeft = true; // Toggle between left and right
+
+        for (int i = 0; i < coinCount; i++)
+        {
+            float offsetX = moveLeft ? -zigzagWidth : zigzagWidth;
+            Vector3 coinPosition = startPosition + segment.forward * i * SEGMENT_WIDTH + new Vector3(offsetX, 1, 0);
+            SpawnCoin(coinPosition);
+            moveLeft = !moveLeft; // Alternate direction
+        }
+        lastSpawnedSegmentIndex += 1;
     }
     private void SpawnByArc(Transform segmentTransform, int numCoins, float radius, float arcAngle)
     {
@@ -73,6 +109,7 @@ public class CoinSpawner : MonoBehaviour
             SpawnCoin(worldPosition);
         }
     }
+
 
 
     private void SpawnCoin(Vector3 position)

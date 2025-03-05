@@ -8,10 +8,12 @@ using Random = UnityEngine.Random;
 public class Segment : MonoBehaviour
 {
     [SerializeField] private List<GameObject> decorationObjects;
+    public int unitID { get;set; }
     public bool segmentTurn = false;
     float XLimit = 4f;
     float ZLimit = 4f;
     [SerializeField] private List<GameObject> walls;
+
     Action RecycleAction;
     private void Start()
     {
@@ -69,12 +71,21 @@ public class Segment : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             StartCoroutine(InvokeActionAfterDelay());
+            PathGenerator.Instance.currentSegmentPlayerReach += 1;
+            PathGenerator.Instance.CheckSpawnSegment();
+            
         }
+
     }
     private IEnumerator InvokeActionAfterDelay()
     {
         yield return new WaitForSeconds(3);
-        RecycleAction?.Invoke();
+        if (!GameManager.Instance.isGameOver && GameManager.Instance.isGameStarting == true ) 
+        {
+            RecycleAction?.Invoke(); 
+        }
+       
+        
     }
     public void ReturnAction (Action _recycleAction)
     {

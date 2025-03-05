@@ -40,6 +40,7 @@ public class PlayerMovement : MonoBehaviour
     {
 
         if (!GameManager.Instance.isGameStarting) return;
+        if (GameManager.Instance.isGameOver) return;
         horizonInput = Input.GetAxisRaw("Horizontal");
         MoveFoward();
         ChangLane();
@@ -48,14 +49,12 @@ public class PlayerMovement : MonoBehaviour
         {
             
             CharacterTurning();
-            Debug.Log("isTurning:" + isTurning);
 
 
         }
         else if (currentSegment.segmentTurn == false)
         {
             isTurning = false;
-            Debug.Log("isTurning:" + isTurning);
 
         }
     }

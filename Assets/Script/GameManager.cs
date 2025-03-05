@@ -44,8 +44,8 @@ public class GameManager : MonoBehaviour
     private IEnumerator GameOver()
     {
         GameOverPanel.SetActive(true);
+        yield return new WaitForSeconds(2);
         Time.timeScale = 0;
-        yield return new WaitForSeconds(3);
 
     }
     private void UpdateScore()

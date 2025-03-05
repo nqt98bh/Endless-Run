@@ -962,7 +962,6 @@ MonoBehaviour:
   segmentPrefab: {fileID: 8193447061830127422, guid: 1873f1e881a03f24e8a9c944161a65a3,
     type: 3}
   segmentList: []
-  segmentTurn: []
   player: {fileID: 383499691}
 --- !u!4 &474068822
 Transform:
@@ -2183,12 +2182,12 @@ SceneRoots:
   m_Roots:
   - {fileID: 963194228}
   - {fileID: 705507995}
-  - {fileID: 383499690}
+  - {fileID: 474068822}
   - {fileID: 160736661}
+  - {fileID: 383499690}
   - {fileID: 1771639566}
   - {fileID: 1958566472}
   - {fileID: 990854800}
   - {fileID: 1956239109}
   - {fileID: 105709586}
   - {fileID: 2074690394}
-  - {fileID: 474068822}
