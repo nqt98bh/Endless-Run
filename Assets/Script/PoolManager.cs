@@ -9,7 +9,6 @@ public class PoolManager : MonoBehaviour
     [SerializeField] private GameObject prefab;
     [SerializeField] private int poolSize;
     private List<GameObject> poolList = new List<GameObject>();
-    public Action RecycleAction;
 
     private void Awake()
     {

@@ -14,55 +14,52 @@ public class CoinSpawner : MonoBehaviour
     [SerializeField] private Transform player;
     int lastSpawnedSegmentIndex = -1;
 
-    private void Update()
+    private void Awake()
+    {
+        Instance = this;
+    }
+  
+    
+    private void FixedUpdate()
     {
         //SpawnCoinRandom();
-    }
-
-
-    private void CheckSpawnCoin()
-    {
+        ReturnCoin();
 
     }
-    public void SpawnCoinRandom()
+
+ 
+    public void SpawnCoinRandom(Transform segment)
     {
-      
-        for(int i = lastSpawnedSegmentIndex ; i < PathGenerator.Instance.segmentPool.GetPoolList().Count; i++) 
-        {
-           
-            GameObject segment = PathGenerator.Instance.segmentPool.GetPoolList()[i];
-            if (segment != null && player.position.z + 10f >= segment.transform.position.z && i % 5 == 0)
-            {
+        //List<GameObject> segmentList = PathGenerator.Instance.segmentPool.GetPoolList();
+        //if(segmentList == null || segmentList.Count ==0) return; 
+
+        //for (int i = lastSpawnedSegmentIndex+1; i < segmentList.Count; i++)
+        //{
+
+        //    GameObject segment = segmentList[i];
+          
                 int randomSpawnType = Random.Range(0, 2);
                 if (randomSpawnType == 0)
                 {
                     SpawnStraightLine(segment.transform);
+                    Debug.Log("Spawn straight");
                 }
                 else if (randomSpawnType == 1)
                 {
                     //SpawnZigzagLine(segment.transform);
+                    Debug.Log("Spawn ZigZag");
                 }
-                
-                lastSpawnedSegmentIndex =i;
-                Debug.Log("lastSpawnedSegmentIndex:" + lastSpawnedSegmentIndex);
-                break;
-            }
-          
-        }
-        Debug.Log("PathGenerator.Instance.segmentPool.GetPoolList():" + PathGenerator.Instance.segmentPool.GetPoolList().Count);
-        int index = 0;
-        foreach (GameObject segment in PathGenerator.Instance.segmentPool.GetPoolList())
-        {
-            index++;
-            if(index %5 == 0)
-            {
 
-            }
-        }
+                //lastSpawnedSegmentIndex = i;
+                //break;
+            
+
+        //}
+    
 
     }
     
-   private void SpawnStraightLine(Transform segment)
+   public void SpawnStraightLine(Transform segment)
     {
         int randomLane = Random.Range(0, 3);
         Vector3 lane = new Vector3(lanes[randomLane], 1, 0);
@@ -71,23 +68,27 @@ public class CoinSpawner : MonoBehaviour
         {
             SpawnCoin(segment.transform.position + lane + segment.transform.forward * i * SEGMENT_WIDTH);
         }
-        lastSpawnedSegmentIndex +=1;
     }
 
     private void SpawnZigzagLine(Transform segment)
     {
-        float zigzagWidth = 2f; // Adjust width of zigzag pattern
+        float zigzagWidth = 3f; // Adjust width of zigzag pattern
+        float stepDistance = 2f; // Distance between coins
+        float waveFrequency = 1f; // Controls how often the wave oscillates
         Vector3 startPosition = segment.position;
-        bool moveLeft = true; // Toggle between left and right
 
-        for (int i = 0; i < coinCount; i++)
+        for (int i = 0; i < 20; i++)
         {
-            float offsetX = moveLeft ? -zigzagWidth : zigzagWidth;
-            Vector3 coinPosition = startPosition + segment.forward * i * SEGMENT_WIDTH + new Vector3(offsetX, 1, 0);
-            SpawnCoin(coinPosition);
-            moveLeft = !moveLeft; // Alternate direction
+            float offsetX = Mathf.Sin(i * waveFrequency) * zigzagWidth; // Smooth curve movement
+
+            // Calculate local position first
+            Vector3 localPosition = new Vector3(offsetX, 1, i * stepDistance);
+
+            // Convert local position to world position using segment's rotation
+            Vector3 worldPosition = segment.TransformPoint(localPosition);
+
+            SpawnCoin(worldPosition);
         }
-        lastSpawnedSegmentIndex += 1;
     }
     private void SpawnByArc(Transform segmentTransform, int numCoins, float radius, float arcAngle)
     {
@@ -119,15 +120,20 @@ public class CoinSpawner : MonoBehaviour
         CoinGo.transform.position = position ; 
         Coin coin = CoinGo.GetComponent<Coin>();
         coinPool.Init(gameObject);
-        if (player.position.z > CoinGo.transform.position.z +2f)
-        {
-            ReturnCoin(CoinGo);
-        }
+     
 
     }
-    private void ReturnCoin(GameObject coin)
+
+    private void ReturnCoin()
     {
-        coinPool.ReturnPool(coin);
+        foreach (GameObject coin in coinPool.GetPoolList())
+        {
+            if (coin.activeInHierarchy && player.position.z > coin.transform.position.z + 4f)
+            {
+                coinPool.ReturnPool(coin);
+
+            }
+        }
     }
 
 }

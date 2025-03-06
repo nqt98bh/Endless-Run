@@ -72,7 +72,8 @@ public class PathGenerator : MonoBehaviour
             {
                 segment.segmentTurn = true;
             }
-            
+
+
         }
         nextRotation *= Quaternion.Euler(0, rotationAngle, 0);
         segmentGO.transform.rotation = nextRotation;
@@ -80,15 +81,18 @@ public class PathGenerator : MonoBehaviour
         segment.WallSetUp(rotationAngle);
 
         // Update the spawn point for the next segment
-
         nextSpawnPoint += segmentGO.transform.forward*SEGMENT_SQUARE_SIZE ;// Move 1 unit forward in the local forward direction
         segment.ReturnAction(() =>
         {
             RecycleSegment(segmentGO);
         });
+     
         InitSegment(segmentGO);
-        
-        
+        ObstacleSpawner.Instance.SpawnObstacles(segmentGO.transform);
+        if (segmentCount % SEGMENT_BEFORE_TURN == 0) CoinSpawner.Instance.SpawnCoinRandom(segmentGO.transform);
+
+
+
     }
     int RandomTurnWithConstraint()
     {

@@ -45,10 +45,11 @@ public class PlayerMovement : MonoBehaviour
         MoveFoward();
         ChangLane();
 
-        if (currentSegment != null && currentSegment.segmentTurn == true )
+        if (currentSegment != null && currentSegment.segmentTurn == true  )
         {
             
             CharacterTurning();
+            
 
 
         }
@@ -91,16 +92,17 @@ public class PlayerMovement : MonoBehaviour
         if (horizonInput > 0 && isTurning == false)
         {
             StartTurn(90);
+            isTurning = true;
 
         }
         if (horizonInput < 0 && isTurning == false)
         {
             StartTurn(-90);
+            isTurning = true;
 
         }
         if (horizonInput == 0) return;
 
-        isTurning = true;
 
     }
     private void StartTurn(float angle)
