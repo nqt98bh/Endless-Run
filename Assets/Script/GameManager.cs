@@ -14,7 +14,15 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        Instance = this;
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+            return;
+        }
     }
 
     private void Start()
@@ -50,7 +58,12 @@ public class GameManager : MonoBehaviour
     }
     private void UpdateScore()
     {
-        ScoreText.text = $" {PlayerController.Instance.Score}";
+        if (ScoreText == null)
+        {
+            Debug.LogError("ScoreText is NULL! Assign it in the Inspector.");
+            return;
+        }
+        ScoreText.text = $" {CharacterController.Instance.Score}";
     }
 }
 

@@ -18,7 +18,7 @@ public class Coin : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             ReturnToPool();
-            PlayerController.Instance.GetPoint(1);
+            CharacterController.Instance.GetPoint(1);
         }
     }
     private void ReturnToPool()

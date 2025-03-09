@@ -6,9 +6,9 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class PlayerMovement : MonoBehaviour
+public class CharacterMovement : MonoBehaviour
 {
-    public static PlayerMovement Instance;
+    public static CharacterMovement Instance;
     [SerializeField] private float speed = 5f;
     [SerializeField] private float secondsPerTurn = 0.5f;
     private float lastTurnTime = 0;
@@ -21,12 +21,9 @@ public class PlayerMovement : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance == null)
-        {
+       
             Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
-        else { Destroy(gameObject); }
+      
     }
     private void Start()
     {
