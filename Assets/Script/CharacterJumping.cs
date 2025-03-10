@@ -35,6 +35,7 @@ public class CharacterJumping : MonoBehaviour
             jumpCount++;
             Debug.Log("jump");
             DisableCollider();
+            SoundFXManager.Instance.PlaySoundFX(SoundType.Jump);
         }
     }
     private void OnCollisionEnter(Collision collision)
@@ -44,6 +45,7 @@ public class CharacterJumping : MonoBehaviour
             jumpCount = 0;
             animator.SetBool("isJumping", false);
             Debug.Log("isGrounded");
+
         }
     }
     void EnableCollider()

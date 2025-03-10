@@ -25,10 +25,15 @@ public class MainMenu : MonoBehaviour
         {
             SceneManager.LoadScene(sceneGame);
         }
+        PlayStartSound();
+        SoundFXManager.Instance.PlayBackgroundMusic();
+       
     }
+
     private void Setting()
     {
         Debug.Log("Open Setting");
+        SoundFXManager.Instance.PlaySoundFX(SoundType.MenuButtonFX);
     }
     private void Quit()
     {
@@ -37,6 +42,12 @@ public class MainMenu : MonoBehaviour
 #else
         Application.Quit();  // Quit the game in a build
 #endif
+    }
+
+    private void PlayStartSound()
+    {
+        SoundFXManager.Instance.PlaySoundFX(SoundType.StartMusic);
+
     }
 
 }

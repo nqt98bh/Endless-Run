@@ -13,6 +13,7 @@ public class GameMenu : MonoBehaviour
 
 
     [SerializeField] private GameObject Content;
+    [SerializeField] private GameObject Setting;
 
     private bool isPaused = false;
     private void Start()
@@ -30,11 +31,13 @@ public class GameMenu : MonoBehaviour
     {
         Time.timeScale = 0f;
         Content.SetActive(true);
+        Setting.SetActive(true);
 
     }
     private void Continue()
     {
         Content.SetActive(false);
+        Setting.SetActive(false);
         Time.timeScale = 1.0f;
 
 
