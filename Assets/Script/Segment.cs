@@ -70,12 +70,20 @@ public class Segment : MonoBehaviour
         if (collision == null) return;
         if (collision.gameObject.CompareTag("Player"))
         {
-            StartCoroutine(InvokeActionAfterDelay());
+            //StartCoroutine(InvokeActionAfterDelay());
             PathGenerator.Instance.currentSegmentPlayerReach += 1;
             PathGenerator.Instance.CheckSpawnSegment();
             
         }
+      
 
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("PlayerPosition"))
+        {
+            StartCoroutine(InvokeActionAfterDelay());
+        }
     }
     private IEnumerator InvokeActionAfterDelay()
     {

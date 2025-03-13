@@ -45,8 +45,15 @@ public class SoundFXManager : MonoBehaviour
     public void PlayBackgroundMusic()
     {
         BackGroundMusic.clip = GetAudioClip(SoundType.BackgroundMusic);
-        BackGroundMusic.loop = true;
-        BackGroundMusic.Play();
+        if (BackGroundMusic.clip != null)
+        {
+            BackGroundMusic.loop = true;
+            BackGroundMusic.Play();
+        }
+    }
+    public void StopBackgroundMusic()
+    {
+        BackGroundMusic.clip = null;
     }
 }
 public enum SoundType

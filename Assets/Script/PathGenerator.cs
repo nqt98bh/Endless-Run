@@ -15,7 +15,6 @@ public class PathGenerator : MonoBehaviour
     private int DistanceToNextSpawn = 30;
     const int SEGMENT_SQUARE_SIZE = 10;
     private int currentTotalRotation = 0;
-    public List<GameObject> segmentList = new List<GameObject>();
     [SerializeField] private Transform player;
     public int currentSegmentPlayerReach { get; set; } = 0;
     public int maxCurrentSegmentIndex { get; set; }
@@ -31,6 +30,7 @@ public class PathGenerator : MonoBehaviour
         SpawnSegment(0);
 
     }
+
     
     
     void SpawnSegment(int startIndex)
@@ -77,19 +77,22 @@ public class PathGenerator : MonoBehaviour
         }
         nextRotation *= Quaternion.Euler(0, rotationAngle, 0);
         segmentGO.transform.rotation = nextRotation;
-        segmentList.Add(segmentGO);
         segment.WallSetUp(rotationAngle);
 
         // Update the spawn point for the next segment
         nextSpawnPoint += segmentGO.transform.forward*SEGMENT_SQUARE_SIZE ;// Move 1 unit forward in the local forward direction
+        
         segment.ReturnAction(() =>
         {
+            //int oldSegmentIndex = segmentList.IndexOf(segmentGO)-2;
+            //if(oldSegmentIndex <0) { oldSegmentIndex = 0; }
+            //RecycleSegment(segmentList[oldSegmentIndex]);
             RecycleSegment(segmentGO);
         });
      
         InitSegment(segmentGO);
-        ObstacleSpawner.Instance.SpawnObstacles(segmentGO.transform);
-        if (segmentCount % SEGMENT_BEFORE_TURN == 0) CoinSpawner.Instance.SpawnCoinRandom(segmentGO.transform);
+        ObstacleSpawner.Instance.SpawnObstacles(segmentGO.transform.position);
+        if (segmentCount % SEGMENT_BEFORE_TURN*2 == 0) CoinSpawner.Instance.SpawnCoinRandom(segmentGO.transform);
 
 
 
@@ -114,7 +117,6 @@ public class PathGenerator : MonoBehaviour
     }
     private void RecycleSegment(GameObject segment)
     {
-        segmentList.Remove(segment);
         segmentPool.ReturnPool(segment);
     }
 

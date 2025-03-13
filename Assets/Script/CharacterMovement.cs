@@ -14,7 +14,6 @@ public class CharacterMovement : MonoBehaviour
     private float lastTurnTime = 0;
     private Quaternion targetRotation;
     private float horizonInput;
-    private Lanes lanes;
     Segment currentSegment = null;
     Animator animator;
     bool isTurning = false;
@@ -29,16 +28,17 @@ public class CharacterMovement : MonoBehaviour
     {
 
         targetRotation = transform.rotation;
-        lanes = Lanes.Middle;
         animator = GetComponent<Animator>();
 
     }
     private void Update()
     {
+        if (GameManager.Instance.IsPausedGame()) return;
 
         if (!GameManager.Instance.isGameStarting) return;
         if (GameManager.Instance.isGameOver) return;
         horizonInput = Input.GetAxisRaw("Horizontal");
+        
         MoveFoward();
         ChangLane();
 
@@ -46,8 +46,6 @@ public class CharacterMovement : MonoBehaviour
         {
             
             CharacterTurning();
-            
-
 
         }
         else if (currentSegment.segmentTurn == false)
@@ -110,17 +108,18 @@ public class CharacterMovement : MonoBehaviour
   
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("DeathZone") )
-        {
-            GameManager.Instance.isGameOver = true;
+        //if (collision.gameObject.CompareTag("DeathZone") )
+        //{
+        //    GameManager.Instance.isGameOver = true;
+        //    SoundFXManager.Instance.PlaySoundFX(SoundType.Death);
 
-        }
-        if (collision.gameObject.CompareTag("Obstacle"))
+        //}
+        if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("DeathZone"))
         {
             
             animator.SetTrigger("CollideObstacle");
-            Debug.Log("collide with obstacle");
-           GameManager.Instance.isGameOver = true;
+            GameManager.Instance.isGameOver = true;
+            SoundFXManager.Instance.PlaySoundFX(SoundType.Death);
 
 
         }
@@ -135,9 +134,4 @@ public class CharacterMovement : MonoBehaviour
    
 
 }
-public enum Lanes
-{
-    Left,
-    Right,
-    Middle,
-}
+

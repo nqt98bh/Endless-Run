@@ -93,6 +93,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2222111361405018444}
   - component: {fileID: 230860312991076117}
+  - component: {fileID: -3329176587516389675}
   m_Layer: 0
   m_Name: Tree_01
   m_TagString: Obstacle
@@ -140,6 +141,18 @@ LODGroup:
     renderers:
     - renderer: {fileID: 804206825550485546}
   m_Enabled: 1
+--- !u!114 &-3329176587516389675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2222111361404534124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d70dcc37323f9ae4485de72a72ff8749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7155140798900432468
 GameObject:
   m_ObjectHideFlags: 0

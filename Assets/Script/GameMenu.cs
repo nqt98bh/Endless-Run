@@ -15,7 +15,6 @@ public class GameMenu : MonoBehaviour
     [SerializeField] private GameObject Content;
     [SerializeField] private GameObject Setting;
 
-    private bool isPaused = false;
     private void Start()
     {
         ButtonContinue.onClick.AddListener(Continue);
@@ -23,15 +22,13 @@ public class GameMenu : MonoBehaviour
         ButtonRestart.onClick.AddListener(Restart);
         ButtonPause.onClick.AddListener(Pause);
     }
-    private void Update()
+  
+    public void Pause()
     {
-        
-    }
-    private void Pause()
-    {
-        Time.timeScale = 0f;
+        //Time.timeScale = 0f;
         Content.SetActive(true);
         Setting.SetActive(true);
+        GameManager.Instance.SetPauseGame(true);
 
     }
     private void Continue()
@@ -39,6 +36,8 @@ public class GameMenu : MonoBehaviour
         Content.SetActive(false);
         Setting.SetActive(false);
         Time.timeScale = 1.0f;
+        GameManager.Instance.SetPauseGame(false);
+
 
 
     }
@@ -48,7 +47,7 @@ public class GameMenu : MonoBehaviour
         if (Application.CanStreamedLevelBeLoaded(mainMenuScene))
         {
             SceneManager.LoadScene(mainMenuScene);
-
+            SoundFXManager.Instance.StopBackgroundMusic();
         }
     }
     private void Restart()

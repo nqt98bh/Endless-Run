@@ -8,37 +8,39 @@ public class PoolManager : MonoBehaviour
 
     [SerializeField] private GameObject prefab;
     [SerializeField] private int poolSize;
-    private List<GameObject> poolList = new List<GameObject>();
-
+    private Queue<GameObject> poolQueue = new Queue<GameObject>();
     private void Awake()
     {
-        for (int i = 0; i < poolSize; i++)
+       
+        SetPool();
+    }
+
+    private void SetPool()
+    {
+        for (int i =0; i < poolSize; i++)
         {
-            GameObject go = Instantiate(prefab);
-            go.SetActive(false);
-            poolList.Add(go);
+            GameObject objectedPool = Instantiate(prefab);
+            objectedPool.SetActive(false);
+            poolQueue.Enqueue(objectedPool);
         }
     }
 
+
+
     public GameObject GetObject(Vector3 position, Quaternion quaternion)
     {
-        foreach (GameObject go in poolList)
+        if (poolQueue.Count == 0)
         {
-            if (!go.gameObject.activeInHierarchy)
-            {
-                go.transform.position = position;
-                go.transform.rotation = quaternion;
-                go.SetActive(true);
-                return go;
-            }
+            GameObject newGo = Instantiate(prefab);
+            newGo.transform.position = position;
+            newGo.transform.rotation = quaternion;
+            return newGo;
         }
-        // if null => init
-        GameObject newGo = Instantiate(prefab);
-        poolList.Add(newGo);
-        newGo.transform.position = position;
-        newGo.transform.rotation = quaternion;
-        newGo.SetActive(true);
-        return newGo;
+        GameObject go = poolQueue.Dequeue();
+        go.transform.position = position;
+        go.transform.rotation = quaternion;
+        return go;
+   
     }
 
     public void Init(GameObject go)
@@ -49,9 +51,11 @@ public class PoolManager : MonoBehaviour
     public void ReturnPool(GameObject go)
     {
         go.SetActive(false);
+        poolQueue.Enqueue(go);
     }
-    public List<GameObject> GetPoolList()
+    public Queue<GameObject> GetPoolList()
     {
-        return poolList;
+        return poolQueue;
     }
+    
 }

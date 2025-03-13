@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class MenuSoundFX : MonoBehaviour
 {
+
     public void PlayMenuSound()
     {
         SoundFXManager.Instance.PlaySoundFX(SoundType.MenuButtonFX);

@@ -12,7 +12,6 @@ public class CoinSpawner : MonoBehaviour
     private int SEGMENT_WIDTH = 5;
     private List<int> lanes = new List<int>() { -3, 0, 3 };
     [SerializeField] private Transform player;
-    int lastSpawnedSegmentIndex = -1;
 
     private void Awake()
     {
@@ -22,7 +21,8 @@ public class CoinSpawner : MonoBehaviour
     
     private void FixedUpdate()
     {
-        //SpawnCoinRandom();
+        if (GameManager.Instance.IsPausedGame()) return;
+      
         ReturnCoin();
 
     }
@@ -30,32 +30,18 @@ public class CoinSpawner : MonoBehaviour
  
     public void SpawnCoinRandom(Transform segment)
     {
-        //List<GameObject> segmentList = PathGenerator.Instance.segmentPool.GetPoolList();
-        //if(segmentList == null || segmentList.Count ==0) return; 
-
-        //for (int i = lastSpawnedSegmentIndex+1; i < segmentList.Count; i++)
-        //{
-
-        //    GameObject segment = segmentList[i];
-          
-                int randomSpawnType = Random.Range(0, 2);
+       
+                int randomSpawnType = Random.Range(0, 4);
                 if (randomSpawnType == 0)
                 {
                     SpawnStraightLine(segment.transform);
                     Debug.Log("Spawn straight");
                 }
-                else if (randomSpawnType == 1)
+                else if (randomSpawnType == 2)
                 {
-                    //SpawnZigzagLine(segment.transform);
+                    SpawnZigzagLine(segment.transform);
                     Debug.Log("Spawn ZigZag");
                 }
-
-                //lastSpawnedSegmentIndex = i;
-                //break;
-            
-
-        //}
-    
 
     }
     
@@ -119,7 +105,7 @@ public class CoinSpawner : MonoBehaviour
         GameObject CoinGo = coinPool.GetObject(position,Quaternion.identity);
         CoinGo.transform.position = position ; 
         Coin coin = CoinGo.GetComponent<Coin>();
-        coinPool.Init(gameObject);
+        coinPool.Init(CoinGo);
      
 
     }

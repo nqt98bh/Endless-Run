@@ -6,11 +6,13 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
+    public GameMenu gameMenu;
     [SerializeField] private GameObject GameOverPanel;
     [SerializeField] private GameObject StartingPanel;
     [SerializeField] private TextMeshProUGUI ScoreText;
     public bool isGameOver;
     public bool isGameStarting;
+    private bool pauseGame  = false;
 
     private void Awake()
     {
@@ -30,16 +32,19 @@ public class GameManager : MonoBehaviour
         bool isGameOver = false;
         bool isGameStarting = false;
         Time.timeScale = 1;
+        SetPauseGame(false);
+        
     }
     private void Update()
     {
+
         if(Input.GetKeyDown(KeyCode.Return))
         {
             StartingGame();
         }
         if (isGameOver)
         {
-            StartCoroutine(GameOver());
+            GameOver();
         }
 
         UpdateScore();
@@ -49,11 +54,14 @@ public class GameManager : MonoBehaviour
         isGameStarting = true;
         StartingPanel.SetActive(false);
     }
-    private IEnumerator GameOver()
+    private void GameOver()
     {
+        
         GameOverPanel.SetActive(true);
-        yield return new WaitForSeconds(2);
-        Time.timeScale = 0;
+        gameMenu.Pause();
+        SetPauseGame(true);
+        
+        //Time.timeScale = 0;
 
     }
     private void UpdateScore()
@@ -65,5 +73,15 @@ public class GameManager : MonoBehaviour
         }
         ScoreText.text = $" {CharacterController.Instance.Score}";
     }
+
+    public void SetPauseGame(bool isPause)
+    {
+        pauseGame = isPause;
+    }
+    public bool IsPausedGame()
+    {
+        return pauseGame;
+    }
+    
 }
 

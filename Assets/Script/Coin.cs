@@ -19,6 +19,7 @@ public class Coin : MonoBehaviour
         {
             ReturnToPool();
             CharacterController.Instance.GetPoint(1);
+            SoundFXManager.Instance.PlaySoundFX(SoundType.GetCoin);
         }
     }
     private void ReturnToPool()
