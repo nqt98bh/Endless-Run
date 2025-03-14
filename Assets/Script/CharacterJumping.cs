@@ -33,7 +33,6 @@ public class CharacterJumping : MonoBehaviour
             rb.AddForce(Vector3.up*jumpForce,ForceMode.Impulse);
             animator.SetBool("isJumping",true);
             jumpCount++;
-            Debug.Log("jump");
             DisableCollider();
             SoundFXManager.Instance.PlaySoundFX(SoundType.Jump);
         }
@@ -44,7 +43,6 @@ public class CharacterJumping : MonoBehaviour
         {
             jumpCount = 0;
             animator.SetBool("isJumping", false);
-            Debug.Log("isGrounded");
 
         }
     }

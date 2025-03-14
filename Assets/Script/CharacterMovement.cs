@@ -9,14 +9,18 @@ using UnityEngine.UIElements;
 public class CharacterMovement : MonoBehaviour
 {
     public static CharacterMovement Instance;
-    [SerializeField] private float speed = 5f;
+    [SerializeField] private float speed;
+    [SerializeField] private float defaultSpeed = 10f;
     [SerializeField] private float secondsPerTurn = 0.5f;
+    float timeSpeedUpInterval = 10f;
+    float timer = 0f;
     private float lastTurnTime = 0;
     private Quaternion targetRotation;
     private float horizonInput;
     Segment currentSegment = null;
     Animator animator;
     bool isTurning = false;
+    private bool isSpeedUp = false;
 
     private void Awake()
     {
@@ -26,7 +30,7 @@ public class CharacterMovement : MonoBehaviour
     }
     private void Start()
     {
-
+        speed = defaultSpeed;
         targetRotation = transform.rotation;
         animator = GetComponent<Animator>();
 
@@ -52,6 +56,16 @@ public class CharacterMovement : MonoBehaviour
         {
             isTurning = false;
 
+        }
+        if(isSpeedUp == true)
+        {
+            timer += Time.deltaTime;
+            if(timer > timeSpeedUpInterval)
+            {
+                isSpeedUp = false;
+                speed = defaultSpeed;
+                timer = 0;
+            }
         }
     }
 
@@ -108,12 +122,7 @@ public class CharacterMovement : MonoBehaviour
   
     private void OnCollisionEnter(Collision collision)
     {
-        //if (collision.gameObject.CompareTag("DeathZone") )
-        //{
-        //    GameManager.Instance.isGameOver = true;
-        //    SoundFXManager.Instance.PlaySoundFX(SoundType.Death);
-
-        //}
+       
         if (collision.gameObject.CompareTag("Obstacle") || collision.gameObject.CompareTag("DeathZone"))
         {
             
@@ -132,6 +141,11 @@ public class CharacterMovement : MonoBehaviour
        
     }
    
+    public void SpeedUp(float amount)
+    {
+        speed += amount;
+        isSpeedUp = true;
+    }
 
 }
 

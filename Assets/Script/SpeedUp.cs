@@ -2,11 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
 
-public class Coin : MonoBehaviour
+public class SpeedUp : MonoBehaviour
 {
-
     Action RecycleAction;
 
     // Update is called once per frame
@@ -17,7 +15,7 @@ public class Coin : MonoBehaviour
         {
             RecycleAction?.Invoke();
 
-            CharacterController.Instance.GetPoint(1);
+            CharacterMovement.Instance.SpeedUp(5);
             SoundFXManager.Instance.PlaySoundFX(SoundType.GetCoin);
         }
         else if (other.CompareTag("BehindPlayer"))
@@ -25,11 +23,9 @@ public class Coin : MonoBehaviour
             RecycleAction?.Invoke();
         }
     }
-   
-    public void ReturnCoinAction(Action _recycleActyion)
+
+    public void ReturnItemAction(Action _recycleActyion)
     {
         RecycleAction = _recycleActyion;
     }
-
-
 }

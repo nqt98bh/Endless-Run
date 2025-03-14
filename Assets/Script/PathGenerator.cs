@@ -84,16 +84,18 @@ public class PathGenerator : MonoBehaviour
         
         segment.ReturnAction(() =>
         {
-            //int oldSegmentIndex = segmentList.IndexOf(segmentGO)-2;
-            //if(oldSegmentIndex <0) { oldSegmentIndex = 0; }
-            //RecycleSegment(segmentList[oldSegmentIndex]);
+           
             RecycleSegment(segmentGO);
         });
      
         InitSegment(segmentGO);
-        ObstacleSpawner.Instance.SpawnObstacles(segmentGO.transform.position);
-        if (segmentCount % SEGMENT_BEFORE_TURN*2 == 0) CoinSpawner.Instance.SpawnCoinRandom(segmentGO.transform);
+        if (segmentCount % SEGMENT_BEFORE_TURN * 2 == 0)
+        {
+            CoinSpawner.Instance.SpawnCoinRandom(segmentGO.transform);
+            ItemSpawner.Instance.SpawnItem(segmentGO.transform.position+new Vector3(0,1.5f,0));
+        }
 
+        ObstacleSpawner.Instance.SpawnObstacles(segmentGO.transform);
 
 
     }

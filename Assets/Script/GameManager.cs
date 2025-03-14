@@ -61,14 +61,12 @@ public class GameManager : MonoBehaviour
         gameMenu.Pause();
         SetPauseGame(true);
         
-        //Time.timeScale = 0;
 
     }
     private void UpdateScore()
     {
         if (ScoreText == null)
         {
-            Debug.LogError("ScoreText is NULL! Assign it in the Inspector.");
             return;
         }
         ScoreText.text = $" {CharacterController.Instance.Score}";

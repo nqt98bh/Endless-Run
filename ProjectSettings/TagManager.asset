@@ -7,7 +7,7 @@ TagManager:
   - DeathZone
   - Ground
   - Obstacle
-  - PlayerPosition
+  - BehindPlayer
   layers:
   - Default
   - TransparentFX

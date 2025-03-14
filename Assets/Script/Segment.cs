@@ -63,14 +63,12 @@ public class Segment : MonoBehaviour
             wallLeft.SetActive(true);
             wallRight.SetActive(true);
         }
-        //Debug.Log("segment turning:"+isTurning);
     }
     private void OnCollisionEnter(Collision collision)
     {
         if (collision == null) return;
         if (collision.gameObject.CompareTag("Player"))
         {
-            //StartCoroutine(InvokeActionAfterDelay());
             PathGenerator.Instance.currentSegmentPlayerReach += 1;
             PathGenerator.Instance.CheckSpawnSegment();
             
@@ -80,21 +78,13 @@ public class Segment : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerPosition"))
+        if (other.CompareTag("BehindPlayer"))
         {
-            StartCoroutine(InvokeActionAfterDelay());
+            RecycleAction?.Invoke();
+
         }
     }
-    private IEnumerator InvokeActionAfterDelay()
-    {
-        yield return new WaitForSeconds(3);
-        if (!GameManager.Instance.isGameOver && GameManager.Instance.isGameStarting == true ) 
-        {
-            RecycleAction?.Invoke(); 
-        }
-       
-        
-    }
+ 
     public void ReturnAction (Action _recycleAction)
     {
         RecycleAction = _recycleAction;

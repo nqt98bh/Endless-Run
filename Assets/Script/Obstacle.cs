@@ -6,29 +6,15 @@ using UnityEngine;
 public class Obstacle : MonoBehaviour
 {
     Action RecycleAction;
-
-    private void Start()
-    {
-    }
-
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("PlayerPosition"))
+        if (other.CompareTag("BehindPlayer"))
         {
-            Debug.Log(" colider with player pisition");
-            StartCoroutine(InvokeActionAfterDelay());
+            RecycleAction?.Invoke();
         }
     }
-    private IEnumerator InvokeActionAfterDelay()
-    {
-        yield return new WaitForSeconds(3);
-       
-            RecycleAction?.Invoke();
-        
-
-
-    }
-    public void ReturnToPool(Action _recycleActyion)
+  
+    public void ReturnObstacleAction(Action _recycleActyion)
     {
         RecycleAction = _recycleActyion;
     }

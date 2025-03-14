@@ -23,7 +23,7 @@ public class CoinSpawner : MonoBehaviour
     {
         if (GameManager.Instance.IsPausedGame()) return;
       
-        ReturnCoin();
+     
 
     }
 
@@ -35,12 +35,10 @@ public class CoinSpawner : MonoBehaviour
                 if (randomSpawnType == 0)
                 {
                     SpawnStraightLine(segment.transform);
-                    Debug.Log("Spawn straight");
                 }
                 else if (randomSpawnType == 2)
                 {
                     SpawnZigzagLine(segment.transform);
-                    Debug.Log("Spawn ZigZag");
                 }
 
     }
@@ -76,28 +74,6 @@ public class CoinSpawner : MonoBehaviour
             SpawnCoin(worldPosition);
         }
     }
-    private void SpawnByArc(Transform segmentTransform, int numCoins, float radius, float arcAngle)
-    {
-        Vector3 segmentPosition = segmentTransform.position;
-        Quaternion segmentRotation = segmentTransform.rotation; // Get rotation to align coins with path
-
-        for (int i = 0; i < numCoins; i++)
-        {
-            float angle = Mathf.Lerp(-arcAngle / 2, arcAngle / 2, (float)i / (numCoins - 1)); // Spread coins evenly
-
-            // Calculate local position
-            float localX = radius * Mathf.Sin(angle * Mathf.Deg2Rad);
-            float localZ = radius * Mathf.Cos(angle * Mathf.Deg2Rad); // Arc moves forward
-
-            // Convert to world position using segment's rotation
-            Vector3 localPosition = new Vector3(localX, 1f, localZ);
-            Vector3 worldPosition = segmentPosition + segmentRotation * localPosition;
-
-            SpawnCoin(worldPosition);
-        }
-    }
-
-
 
     private void SpawnCoin(Vector3 position)
     {
@@ -105,21 +81,17 @@ public class CoinSpawner : MonoBehaviour
         GameObject CoinGo = coinPool.GetObject(position,Quaternion.identity);
         CoinGo.transform.position = position ; 
         Coin coin = CoinGo.GetComponent<Coin>();
+        coin.ReturnCoinAction(() =>
+        {
+            RecycleCoin(CoinGo);
+        });
         coinPool.Init(CoinGo);
      
 
     }
 
-    private void ReturnCoin()
+    private void RecycleCoin(GameObject coin)
     {
-        foreach (GameObject coin in coinPool.GetPoolList())
-        {
-            if (coin.activeInHierarchy && player.position.z > coin.transform.position.z + 4f)
-            {
-                coinPool.ReturnPool(coin);
-
-            }
-        }
+        coinPool.ReturnPool(coin);
     }
-
 }
